@@ -1,0 +1,38 @@
+{
+  "name": "@hexlet/code",
+  "type": "module",
+  "jest": {
+    "testEnviroment": "node",
+    "transform": {}
+  },
+  "version": "1.0.0",
+  "description": "backend-project-lvl3",
+  "main": "src/index.js",
+  "scripts": {
+    "test": "npx jest"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Artkiller971/backend-project-lvl3.git"
+  },
+  "author": "Artkiller971",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/Artkiller971/backend-project-lvl3/issues"
+  },
+  "homepage": "https://github.com/Artkiller971/backend-project-lvl3#readme",
+  "dependencies": {
+    "axios": "^0.21.1",
+    "commander": "^7.2.0"
+  },
+  "devDependencies": {
+    "eslint": "^7.27.0",
+    "eslint-config-airbnb-base": "^14.2.1",
+    "eslint-plugin-import": "^2.23.4",
+    "eslint-plugin-jest": "^24.3.6",
+    "jest": "^27.0.3",
+    "jest-cli": "^27.0.3",
+    "jest-esm-transformer": "^1.0.0",
+    "nock": "^13.1.0"
+  }
+}
