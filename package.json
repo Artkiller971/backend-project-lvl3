@@ -2,7 +2,7 @@
   "name": "@hexlet/code",
   "type": "module",
   "jest": {
-    "testEnviroment": "node",
+    "testEnvironment": "node",
     "transform": {}
   },
   "version": "1.0.0",
