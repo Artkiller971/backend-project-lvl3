@@ -15,7 +15,7 @@ const downloadPageHtml = (pageUrl) => axios.get(pageUrl).then((response) => resp
 
 const checkDirAccess = (dir) => fs.access(dir);
 
-export default (url, outputDir = process.cwd()) => {
+export default (url, outputDir) => {
   const filepath = path.join(outputDir, urlToFilename(url));
   return checkDirAccess(outputDir)
     .then(() => downloadPageHtml(url))

@@ -7,6 +7,9 @@ publish:
 lint:
 	npx eslint .
 
+page-loader:
+	node src/bin/pageLoader.js
+
 test-coverage:
 	npm test -- --coverage --coverageProvider=v8
 
