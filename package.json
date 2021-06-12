@@ -2,6 +2,9 @@
   "name": "@hexlet/code",
   "type": "module",
   "jest": {
+    "testPathIgnorePatterns": [
+      "__tests__/__fixtures__"
+    ],
     "testEnvironment": "node",
     "transform": {}
   },
