@@ -14,4 +14,4 @@ test-coverage:
 	npm test -- --coverage --coverageProvider=v8
 
 test:
-	npm test
+	DEBUG=page-loader*,axios,nock.common* npm test
