@@ -39,7 +39,7 @@ const downloadPageHtml = (pageUrl) => {
 
 const writeFile = (filePath, data) => {
   log("Saving '%s'", filePath);
-  return fs.promises.writeFile(filePath, data)
+  return fs.promises.writeFile(filePath, data, 'utf-8')
     .then(() => log(" Saved '%s'", filePath));
 };
 
