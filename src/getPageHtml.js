@@ -37,6 +37,12 @@ const downloadPageHtml = (pageUrl) => {
     });
 };
 
+const writeFile = (filePath, data) => {
+  log("Saving '%s'", filePath);
+  return fs.promises.writeFile(filePath, data)
+    .then(() => log(" Saved '%s'", filePath));
+};
+
 const downloadBinaryResource = (resourceUrl, filepath) => {
   logRequest("Requesting binary '%s'", resourceUrl);
   return axios.get(resourceUrl, { responseType: 'stream' })
@@ -49,7 +55,7 @@ const downloadTextResource = (resourceUrl, filepath) => {
   return axios.get(resourceUrl)
     .then((response) => {
       logRequest(" Received `%s'", resourceUrl);
-      return fsp.writeFile(filepath, response.data);
+      return writeFile(filepath, response.data);
     });
 };
 
@@ -112,7 +118,7 @@ export default (url, outputDir, render = () => {}) => {
       return downloadPageHtml(url);
     })
     .then((data) => processAllTags(url, data, resourceDir))
-    .then(({ assetUrls, html }) => fsp.writeFile(destFilepath, html).then(() => assetUrls))
+    .then(({ assetUrls, html }) => writeFile(destFilepath, html).then(() => assetUrls))
     .then((assetUrls) => {
       log(`donwloading local resources to ${resourceDir}`);
       return downloadResources(assetUrls, resourcePath, render);
