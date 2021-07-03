@@ -2,7 +2,7 @@
 
 import program from 'commander';
 import path from 'path';
-import downloadPage from '../getPageHtml.js';
+import downloadPage from '../index.js';
 import render from '../render.js';
 
 const getFullPath = (pathname = '') => path.resolve(process.cwd(), pathname);
