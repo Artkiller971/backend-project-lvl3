@@ -60,3 +60,24 @@ test('downloadPage', async () => {
   expect(outputDirFiles).toHaveLength(2);
   expect(assetFiles).toHaveLength(4);
 });
+
+test('invalid url test', async () => {
+  nock('https://fakeserver.com')
+    .get('/fakepage')
+    .reply(404);
+
+  const testUrl = 'https://fakeserver.com/fakepage';
+
+  await expect(downloadPage(testUrl, outputDir)).rejects.toThrow('404');
+});
+
+test('invalid dir test', async () => {
+  nock(server)
+    .get(page)
+    .reply(200);
+
+  const testUrl = `${server}${page}`;
+  const fakeDir = path.join(outputDir, 'fakePath');
+
+  await expect(downloadPage(testUrl, fakeDir)).rejects.toThrow('ENOENT');
+});

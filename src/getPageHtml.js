@@ -7,6 +7,7 @@ import 'axios-debug-log';
 
 const log = debug('page-loader');
 const logError = debug('page-loader:error');
+const logRequest = debug('page-loader:http');
 
 const urlToFilenameWithoutExt = (url) => {
   const { host, pathname } = new URL(url);
@@ -23,25 +24,34 @@ const urlToFilenameWithExt = (url) => {
   return `${filename}${newExt}`;
 };
 
-const downloadPageHtml = (pageUrl) => axios.get(pageUrl).then((response) => response.data)
-  .catch((e) => {
-    logError(e.message);
-    throw e;
-  });
+const downloadPageHtml = (pageUrl) => {
+  logRequest("Requesting '%s'", pageUrl);
+  return axios.get(pageUrl)
+    .then((response) => {
+      logRequest("Request '%s'", pageUrl);
+      return response.data;
+    })
+    .catch((e) => {
+      logError("Request '%s' failed", pageUrl);
+      throw e;
+    });
+};
 
-const downloadBinaryResource = (resourceUrl, filepath) => axios.get(resourceUrl, { responseType: 'stream' })
-  .then((response) => response.data.pipe(fs.createWriteStream(filepath)))
-  .catch((e) => {
-    logError(e.message);
-    throw e;
-  });
+const downloadBinaryResource = (resourceUrl, filepath) => {
+  logRequest("Requesting binary '%s'", resourceUrl);
+  return axios.get(resourceUrl, { responseType: 'stream' })
+    .then((response) => response.data.pipe(fs.createWriteStream(filepath)))
+    .then(() => logRequest(" Received `%s'", resourceUrl));
+};
 
-const downloadTextResource = (resourceUrl, filepath) => axios.get(resourceUrl)
-  .then((response) => fsp.writeFile(filepath, response.data))
-  .catch((e) => {
-    logError(e.message);
-    throw e;
-  });
+const downloadTextResource = (resourceUrl, filepath) => {
+  logRequest("Requesting '%s'", resourceUrl);
+  return axios.get(resourceUrl)
+    .then((response) => {
+      logRequest(" Received `%s'", resourceUrl);
+      return fsp.writeFile(filepath, response.data);
+    });
+};
 
 const resourceTypes = {
   img: { attr: 'src', download: downloadBinaryResource },
@@ -76,19 +86,20 @@ const processAllTags = (url, htmlString, resourceDir) => {
   return { assetUrls, html: $.html() };
 };
 
-const downloadResources = (assetUrls, resourcePath) => fsp.mkdir(resourcePath)
-  .then(() => {
-    log(`assets to save: ${assetUrls.length}`);
-    const promises = assetUrls.map(({ assetUrl, assetFilename, assetDownloadFunction }) => {
-      log(`saving ${assetFilename} to ${path.join(resourcePath, assetFilename)}`);
-      return assetDownloadFunction(assetUrl, path.join(resourcePath, assetFilename));
-    });
-    return Promise.all(promises);
+const tasks = [];
+
+const downloadResources = (assetUrls, resourcePath, render) => {
+  assetUrls.forEach(({ assetUrl, assetFilename, assetDownloadFunction }) => {
+    const promise = assetDownloadFunction(assetUrl, path.join(resourcePath, assetFilename));
+    tasks.push({ title: assetUrl, task: () => promise });
   });
+  return fsp.mkdir(resourcePath)
+    .then(() => render(tasks));
+};
 
 const checkDirAccess = (dir) => fsp.access(dir);
 
-export default (url, outputDir) => {
+export default (url, outputDir, render = () => {}) => {
   const baseName = urlToFilenameWithoutExt(url);
   const filename = `${baseName}.html`;
   const resourceDir = `${baseName}_files`;
@@ -103,10 +114,13 @@ export default (url, outputDir) => {
     .then((data) => processAllTags(url, data, resourceDir))
     .then(({ assetUrls, html }) => fsp.writeFile(destFilepath, html).then(() => assetUrls))
     .then((assetUrls) => {
-      log(`donwloading local resouces to ${resourceDir}`);
-      return downloadResources(assetUrls, resourcePath);
+      log(`donwloading local resources to ${resourceDir}`);
+      return downloadResources(assetUrls, resourcePath, render);
     })
-    .then(() => filename)
+    .then(() => {
+      log('Complete');
+      return filename;
+    })
     .catch((e) => {
       logError(e.message);
       throw e;
