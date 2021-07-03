@@ -54,7 +54,7 @@ test('downloadPage', async () => {
   const outputDirFiles = await fs.readdir(outputDir);
   const expected = await fs.readFile(expectedFile);
   const actual = await fs.readFile(`${outputDir}/ru-hexlet-io-courses.html`);
-  // expect(actual.toString()).toBe(expected.toString());
+  expect(actual.toString()).toBe(expected.toString());
   expect(outputDirFiles).toHaveLength(2);
 });
 
