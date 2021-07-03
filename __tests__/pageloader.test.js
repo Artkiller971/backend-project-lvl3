@@ -3,7 +3,7 @@ import nock from 'nock';
 import path, { dirname } from 'path';
 import { fileURLToPath } from 'url';
 import os from 'os';
-import downloadPage from '../src/getPageHtml';
+import downloadPage from '../src';
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = dirname(__filename);
