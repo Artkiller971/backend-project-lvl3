@@ -52,7 +52,7 @@ const downloadBinaryResource = (resourceUrl, filepath) => {
 
 const downloadTextResource = (resourceUrl, filepath) => {
   logRequest("Requesting '%s'", resourceUrl);
-  return axios.get(resourceUrl)
+  return axios.get(resourceUrl, { responseType: 'arraybuffer' })
     .then((response) => {
       logRequest(" Received `%s'", resourceUrl);
       return fsp.writeFile(filepath, response.data, 'utf-8');
@@ -67,7 +67,7 @@ const resourceTypes = {
 
 const processAllTags = (url, htmlString, resourceDir) => {
   const assetUrls = [];
-  const $ = cheerio.load(htmlString, { decodeEntities: false });
+  const $ = cheerio.load(htmlString, { decodeEntities: false, normalizeWhitespace: true });
   const tags = Object.keys(resourceTypes);
   const urlHostname = new URL(url).hostname;
   tags.forEach((tag) => {
