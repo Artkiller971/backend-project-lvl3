@@ -4,6 +4,7 @@ import path from 'path';
 import cheerio from 'cheerio';
 import debug from 'debug';
 import 'axios-debug-log';
+import Listr from 'listr';
 
 const log = debug('page-loader');
 const logError = debug('page-loader:error');
@@ -92,20 +93,31 @@ const processAllTags = (url, htmlString, resourceDir) => {
   return { assetUrls, html: $.html() };
 };
 
-const tasks = [];
+const downloadResources = (assetUrls, resourcePath) => {
+  const tasks = new Listr([{
+    title: 'Saving Assets',
+    task: () => {
+      const assetTasks = new Listr([], { concurrent: true, exitOnError: false });
 
-const downloadResources = (assetUrls, resourcePath, render) => {
-  assetUrls.forEach(({ assetUrl, assetFilename, assetDownloadFunction }) => {
-    const promise = assetDownloadFunction(assetUrl, path.join(resourcePath, assetFilename));
-    tasks.push({ title: assetUrl, task: () => promise });
-  });
+      assetUrls.forEach(({ assetUrl, assetFilename, assetDownloadFunction }) => {
+        const promise = assetDownloadFunction(assetUrl, path.join(resourcePath, assetFilename));
+        assetTasks.add({
+          title: assetFilename,
+          task: () => promise,
+        });
+      });
+
+      return assetTasks;
+    },
+  },
+  ]);
   return fsp.mkdir(resourcePath)
-    .then(() => render(tasks));
+    .then(() => tasks.run());
 };
 
 const checkDirAccess = (dir) => fsp.access(dir);
 
-export default (url, outputDir = process.cwd(), render = () => {}) => {
+export default (url, outputDir = process.cwd()) => {
   const baseName = urlToFilenameWithoutExt(url);
   const filename = `${baseName}.html`;
   const resourceDir = `${baseName}_files`;
@@ -121,7 +133,7 @@ export default (url, outputDir = process.cwd(), render = () => {}) => {
     .then(({ assetUrls, html }) => writeFile(destFilepath, html).then(() => assetUrls))
     .then((assetUrls) => {
       log(`donwloading local resources to ${resourceDir}`);
-      return downloadResources(assetUrls, resourcePath, render);
+      return downloadResources(assetUrls, resourcePath);
     })
     .then(() => {
       log('Complete');

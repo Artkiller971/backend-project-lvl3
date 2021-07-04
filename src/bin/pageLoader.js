@@ -3,7 +3,6 @@
 import program from 'commander';
 import path from 'path';
 import downloadPage from '../index.js';
-import render from '../render.js';
 
 const getFullPath = (pathname = '') => path.resolve(process.cwd(), pathname);
 
@@ -14,7 +13,7 @@ program
   .arguments('<url>')
   .action((url) => {
     const dest = getFullPath(program.opts().output);
-    downloadPage(url, dest, render)
+    downloadPage(url, dest)
       .then((filename) => {
         console.log(`\n${filename} was successfuly downloaded to ${dest}`);
         process.exit();
