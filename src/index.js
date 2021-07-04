@@ -105,7 +105,7 @@ const downloadResources = (assetUrls, resourcePath, render) => {
 
 const checkDirAccess = (dir) => fsp.access(dir);
 
-export default (url, outputDir, render = () => {}) => {
+export default (url, outputDir = process.cwd(), render = () => {}) => {
   const baseName = urlToFilenameWithoutExt(url);
   const filename = `${baseName}.html`;
   const resourceDir = `${baseName}_files`;
