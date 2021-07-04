@@ -39,7 +39,7 @@ const downloadPageHtml = (pageUrl) => {
 
 const writeFile = (filePath, data) => {
   log("Saving '%s'", filePath);
-  return fs.promises.writeFile(filePath, data, 'utf-8')
+  return fs.promises.writeFile(filePath, data)
     .then(() => log(" Saved '%s'", filePath));
 };
 
@@ -55,7 +55,7 @@ const downloadTextResource = (resourceUrl, filepath) => {
   return axios.get(resourceUrl)
     .then((response) => {
       logRequest(" Received `%s'", resourceUrl);
-      return writeFile(filepath, response.data);
+      return fsp.writeFile(filepath, response.data.trimEnd(), 'utf-8');
     });
 };
 

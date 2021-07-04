@@ -15,10 +15,13 @@ program
   .action((url) => {
     const dest = getFullPath(program.opts().output);
     downloadPage(url, dest, render)
-      .then((filename) => console.log(`\n${filename} was successfuly downloaded to ${dest}`))
+      .then((filename) => {
+        console.log(`\n${filename} was successfuly downloaded to ${dest}`);
+        process.exit();
+      })
       .catch((e) => {
         console.error(e.message);
-        process.exitCode = 1;
+        process.exit(1);
       });
   })
   .parse(process.argv);
