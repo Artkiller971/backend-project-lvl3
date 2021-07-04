@@ -55,7 +55,7 @@ const downloadTextResource = (resourceUrl, filepath) => {
   return axios.get(resourceUrl)
     .then((response) => {
       logRequest(" Received `%s'", resourceUrl);
-      return fsp.writeFile(filepath, response.data.trimEnd(), 'utf-8');
+      return fsp.writeFile(filepath, response.data, 'utf-8');
     });
 };
 
