@@ -14,7 +14,7 @@ program
   .action((url) => {
     try {
       const dest = getFullPath(program.opts().output);
-        downloadPage(url, dest)
+      downloadPage(url, dest)
         .then((filename) => {
           console.log(`\n${filename} was successfuly downloaded to ${dest}`);
           process.exit();
@@ -22,10 +22,10 @@ program
         .catch((e) => {
           console.error(e.message);
           process.exit(1);
-        })
+        });
     } catch (e) {
       console.error(e.message);
-        process.exitCode = 1;
+      process.exitCode = 1;
     }
   });
 
