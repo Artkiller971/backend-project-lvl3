@@ -1,0 +1,30 @@
+{
+  "name": "@hexlet/code",
+  "type": "module",
+  "version": "1.0.0",
+  "description": "[![Actions Status](https://github.com/Artkiller971/backend-project-lvl3/actions/workflows/hexlet-check.yml/badge.svg)](https://github.com/Artkiller971/backend-project-lvl3/actions)",
+  "main": "index.js",
+  "scripts": {
+    "test": "npx jest .",
+    "coverage": "npx jest --coverate ."
+  },
+  "bin": {
+    "pageloader": "bin/pageLoader.js"
+  },
+  "author": "",
+  "license": "ISC",
+  "devDependencies": {
+    "@eslint/js": "^9.23.0",
+    "@stylistic/eslint-plugin-js": "^4.2.0",
+    "eslint": "^9.23.0",
+    "eslint-plugin-fp": "^2.3.0",
+    "eslint-plugin-import": "^2.31.0",
+    "jest": "^29.7.0",
+    "nock": "^14.0.1",
+    "prettier-eslint": "^16.3.0"
+  },
+  "dependencies": {
+    "axios": "^1.8.4",
+    "commander": "^13.1.0"
+  }
+}
