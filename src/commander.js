@@ -13,7 +13,7 @@ program
   .arguments('<url>')
   .action((url, outputDir) => {
     pageloader(url, outputDir.output)
-      .then((pathToFile) => console.log(pathToFile))
+      .then(([path]) => console.log(path))
       .catch((error) => console.error(error));
   });
 
