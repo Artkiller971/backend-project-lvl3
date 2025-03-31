@@ -5,6 +5,8 @@ import { fileURLToPath } from 'node:url';
 import path, { dirname } from 'node:path';
 import nock from 'nock';
 
+import { beforeAll, beforeEach, test, expect } from 'jest';
+
 import download from '../index.js';
 
 const __filename = fileURLToPath(import.meta.url);

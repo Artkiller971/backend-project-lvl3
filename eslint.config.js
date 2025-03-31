@@ -1,19 +1,17 @@
 import globals from 'globals';
 import stylisticJs from '@stylistic/eslint-plugin-js';
-import fp from 'eslint-plugin-fp';
 import importPlugin from 'eslint-plugin-import';
 
 export default [
   {
-    languageOptions: { 
+    languageOptions: {
       globals: {
         ...globals.node,
         ...globals.jest,
-      }
-     },
+      },
+    },
     plugins: {
       '@stylistic/js': stylisticJs,
-      fp,
       importPlugin,
     },
     rules: {
