@@ -13,7 +13,7 @@ axiosDebug(axios);
 export default (url, outputDir = process.cwd()) => {
   log('Trying to access the directory');
 
-  return fs.access(outputDir, fs.constants.R_OK | fs.constants.W_OK)
+  return fs.access(outputDir)
     .then(() => axios.get(url))
     .then(({ data }) => {
       log(`Trying to download: ${url}`);

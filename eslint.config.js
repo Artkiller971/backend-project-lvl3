@@ -5,7 +5,12 @@ import importPlugin from 'eslint-plugin-import';
 
 export default [
   {
-    languageOptions: { globals: globals.node },
+    languageOptions: { 
+      globals: {
+        ...globals.node,
+        ...globals.jest,
+      }
+     },
     plugins: {
       '@stylistic/js': stylisticJs,
       fp,
@@ -15,10 +20,13 @@ export default [
       semi: 'error',
       'no-shadow': 'error',
       'importPlugin/newline-after-import': 'error',
-      'fp/no-mutation': 'error',
-      'fp/no-mutating-methods': 'error',
+      'importPlugin/first': 'error',
+      'object-shorthand': 'error',
+      'no-undef': 'error',
+      'key-spacing': 'error',
       'no-unused-vars': 'error',
       'prefer-const': 'error',
+      'array-bracket-spacing': ['error', 'never'],
       'consistent-return': 'error',
       'arrow-body-style': ['error', 'as-needed'],
       'default-case': 'error',

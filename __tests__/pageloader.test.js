@@ -1,5 +1,3 @@
-/* eslint fp/no-mutation:  */
-
 import * as fs from 'node:fs/promises';
 import * as prettier from 'prettier';
 import os from 'node:os';

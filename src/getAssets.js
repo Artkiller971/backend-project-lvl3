@@ -31,5 +31,5 @@ export default (html, url) => {
       }).get()
     ));
 
-  return [ $.html(), result ];
+  return [$.html(), result];
 };
