@@ -7,7 +7,7 @@ import nock from 'nock';
 
 import {
   beforeAll, beforeEach, test, expect,
-} from 'jest';
+} from '@jest/globals';
 
 import download from '../index.js';
 
