@@ -17,6 +17,9 @@ export default [
     rules: {
       semi: 'error',
       'no-shadow': 'error',
+      'object-curly-newline': ['error', {
+        ImportDeclaration: { multiline: true, minProperties: 3 },
+      }],
       'importPlugin/newline-after-import': 'error',
       'importPlugin/first': 'error',
       'object-shorthand': 'error',
