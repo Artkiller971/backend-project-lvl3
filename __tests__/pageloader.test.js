@@ -56,3 +56,17 @@ test('download page and assets', async () => {
   const assetDirContent = await fs.readdir(assetsDir);
   expect(assetDirContent).toHaveLength(4);
 });
+
+test('directory does not exist', async () => {
+  const undefinedDirectory = 'path/to/undefined/directory';
+  expect.assertions(1);
+
+  return download(tempUrl, undefinedDirectory).catch((e) => expect(e.message).toMatch('Provided directory does not exist'));
+});
+
+test('page does not exist or is unavailable', async () => {
+  const fakeUrl = 'https://this.site.com/does/not/exist';
+  expect.assertions(1);
+
+  return download(fakeUrl, outputDir).catch((e) => expect(e.message).toMatch('The provided link does not lead to a valid resource'));
+});

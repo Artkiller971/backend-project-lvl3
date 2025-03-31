@@ -13,8 +13,14 @@ program
   .arguments('<url>')
   .action((url, outputDir) => {
     pageloader(url, outputDir.output)
-      .then(([path]) => console.log(path))
-      .catch((error) => console.error(error));
+      .then(([path]) => {
+        console.log(`Located in ${path}`);
+        process.exit(0);
+      })
+      .catch((error) => {
+        console.error(error.message);
+        process.exit(-1);
+      });
   });
 
 export default () => program.parse(process.argv);

@@ -19,9 +19,9 @@ export default (html, url) => {
       $(tag).map((index, element) => {
         const current = $(element).attr(tagToAttrMapping[tag]);
 
-        const { origin: currentOrigin } = new URL(url);
-        const assetLink = new URL(current, currentOrigin);
-        if (assetLink.origin === currentOrigin) {
+        const passedUrl = new URL(url);
+        const assetLink = new URL(current, passedUrl);
+        if (assetLink.origin === passedUrl.origin) {
           const newSrc = dirname + getAssetName(assetLink.origin + assetLink.pathname);
           $(element).attr(tagToAttrMapping[tag], newSrc);
 

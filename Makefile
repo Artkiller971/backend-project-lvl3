@@ -8,4 +8,4 @@ lint:
 	npx eslint .
 
 test:
-	npm test
+	DEBUG=page-loader,axios NODE_DEBUG=nock:* npm test

@@ -1,12 +1,32 @@
 import axios from 'axios';
+import * as fs from 'node:fs/promises';
+import debug from 'debug';
+import axiosDebug from 'axios-debug-log';
 
 import download from './src/download.js';
 import getAssets from './src/getAssets.js';
 
-export default (url, outputDir) => (
-  axios.get(url)
-    .then(({ data }) => getAssets(data, url))
+const log = debug('page-loader');
+axiosDebug(axios);
+
+export default (url, outputDir) => {
+  log('Trying to access the directory');
+
+  return fs.access(outputDir, fs.constants.R_OK | fs.constants.W_OK)
+    .then(() => axios.get(url))
+    .then(({ data }) => {
+      log(`Trying to download: ${url}`);
+      return getAssets(data, url);
+    })
     .then(([resultHtml, assets]) => download(assets, url, resultHtml, outputDir))
     .then(([pageFilepath, assetsDir]) => [pageFilepath, assetsDir])
-    .catch((e) => console.error(e))
-);
+    .catch((e) => {
+      if (e.code === 'ENOENT') {
+        throw new Error('Provided directory does not exist');
+      } else if (e.code === 'EACESS') {
+        throw new Error('You do not have access to write to the provided directory');
+      } else if (e.code === 'ENOTFOUND') {
+        throw new Error('The provided link does not lead to a valid resource');
+      }
+    });
+};
