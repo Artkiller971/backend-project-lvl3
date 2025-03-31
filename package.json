@@ -9,7 +9,7 @@
     "coverage": "npx jest --coverate ."
   },
   "bin": {
-    "pageloader": "bin/pageLoader.js"
+    "page-loader": "bin/pageLoader.js"
   },
   "author": "",
   "license": "ISC",
