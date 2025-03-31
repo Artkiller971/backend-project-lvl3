@@ -25,8 +25,8 @@ export default (url, outputDir) => {
         throw new Error('Provided directory does not exist');
       } else if (e.code === 'EACESS') {
         throw new Error('You do not have access to write to the provided directory');
-      } else if (e.code === 'ENOTFOUND') {
-        throw new Error('The provided link does not lead to a valid resource');
       }
+
+      throw new Error(e);
     });
 };

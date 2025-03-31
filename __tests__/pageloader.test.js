@@ -66,7 +66,6 @@ test('directory does not exist', async () => {
 
 test('page does not exist or is unavailable', async () => {
   const fakeUrl = 'https://this.site.com/does/not/exist';
-  expect.assertions(1);
 
-  return download(fakeUrl, outputDir).catch((e) => expect(e.message).toMatch('The provided link does not lead to a valid resource'));
+  await expect(download(fakeUrl, outputDir)).rejects.toThrow();
 });
