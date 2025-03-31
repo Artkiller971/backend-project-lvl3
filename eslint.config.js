@@ -22,7 +22,6 @@ export default [
       }],
       'importPlugin/newline-after-import': 'error',
       'importPlugin/first': 'error',
-      'importPlugin/no-extraneous-dependencies': 'allow',
       'object-shorthand': 'error',
       'no-undef': 'error',
       'key-spacing': 'error',

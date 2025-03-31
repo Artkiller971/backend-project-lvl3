@@ -7,7 +7,7 @@ import { getAssetName, getDirectoryName } from './utils.js';
 
 const log = debug('page-loader');
 
-const downloadImageAsset = (url, outputDir) => {
+const downloadAsset = (url, outputDir) => {
   const filename = getAssetName(url);
   const filepath = path.resolve(outputDir, filename);
   return axios({
@@ -22,30 +22,6 @@ const downloadImageAsset = (url, outputDir) => {
     .catch(() => {
       console.error(`There was an error with the resouce: ${url}`);
     });
-};
-
-const downloadTextAsset = (url, outputDir) => {
-  const filename = getAssetName(url);
-  const filepath = path.resolve(outputDir, filename);
-  return axios({
-    method: 'get',
-    url,
-    responseType: 'stream',
-  })
-    .then(({ data }) => {
-      log(`Downloading resouce: ${url}`);
-      return fs.writeFile(filepath, data);
-    })
-    .catch(() => {
-      console.error(`There was an error with the resouce: ${url}`);
-    });
-};
-
-const getDownloadFunction = (tag) => {
-  if (tag === 'img') {
-    return downloadImageAsset;
-  }
-  return downloadTextAsset;
 };
 
 export default (assets, url, resultHtml, outputDir) => {
@@ -53,7 +29,7 @@ export default (assets, url, resultHtml, outputDir) => {
 
   log('Creating files directory');
   return fs.mkdir(assetsDir, { recursive: true })
-    .then(() => assets.map(({ link, tag }) => getDownloadFunction(tag)(link, assetsDir)))
+    .then(() => assets.map(({ link }) => downloadAsset(link, assetsDir)))
     .then((promises) => Promise.all(promises))
     .then(() => createPageFile(resultHtml, url, outputDir))
     .then((pageFilepath) => [pageFilepath, assetsDir])
