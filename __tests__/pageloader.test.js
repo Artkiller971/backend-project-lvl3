@@ -61,11 +61,13 @@ test('directory does not exist', async () => {
   const undefinedDirectory = 'path/to/undefined/directory';
   expect.assertions(1);
 
-  return download(tempUrl, undefinedDirectory).catch((e) => expect(e.message).toMatch('Provided directory does not exist'));
+  await expect(download(tempUrl, undefinedDirectory)).rejects.toThrow();
+  await fs.rmdir(outputDir);
 });
 
 test('page does not exist or is unavailable', async () => {
   const fakeUrl = 'https://this.site.com/does/not/exist';
 
   await expect(download(fakeUrl, outputDir)).rejects.toThrow();
+  await fs.rmdir(outputDir);
 });

@@ -32,7 +32,7 @@ const downloadTextAsset = (url, outputDir) => {
   return axios.get(url)
     .then(({ data }) => {
       log(`Downloading resouce: ${url}`);
-      return fs.writeFile(filepath, data, 'utf-8');
+      return fs.writeFile(filepath, data);
     })
     .catch(() => {
       console.error(`There was an error with the resouce: ${url}`);
