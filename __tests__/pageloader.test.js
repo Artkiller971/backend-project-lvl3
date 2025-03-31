@@ -23,7 +23,7 @@ beforeAll(async () => {
   const coursesHtml = await fs.readFile(getFixturePath('courses.html'), 'utf-8');
   const imageFile = await fs.readFile(getFixturePath('nodejs.png'));
   const scriptFile = await fs.readFile(getFixturePath('runtime.js'), 'utf-8');
-  const styleFile = await fs.readFile(getFixturePath('application.css'), 'utf-8');
+  const styleFile = await fs.readFile(getFixturePath('application.css'));
 
   nock('https://ru.hexlet.io')
     .get('/courses')
@@ -55,6 +55,10 @@ test('download page and assets', async () => {
 
   const assetDirContent = await fs.readdir(assetsDir);
   expect(assetDirContent).toHaveLength(4);
+
+  const styleFile = await fs.readFile(getFixturePath('application.css'));
+  const cssFile = await fs.readFile(path.join(assetsDir, 'ru-hexlet-io-assets-application.css'));
+  expect(cssFile).toStrictEqual(styleFile);
 });
 
 test('directory does not exist', async () => {

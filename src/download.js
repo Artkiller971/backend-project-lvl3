@@ -29,7 +29,11 @@ const downloadImageAsset = (url, outputDir) => {
 const downloadTextAsset = (url, outputDir) => {
   const filename = getAssetName(url);
   const filepath = path.resolve(outputDir, filename);
-  return axios.get(url)
+  return axios({
+    method: 'get',
+    url: url,
+    responseType: 'stream',
+  })
     .then(({ data }) => {
       log(`Downloading resouce: ${url}`);
       return fs.writeFile(filepath, data);
