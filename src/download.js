@@ -4,6 +4,7 @@ import * as fs from 'node:fs/promises';
 import debug from 'debug';
 import createPageFile from './createPageFile.js';
 import { getAssetName, getDirectoryName } from './utils.js';
+import Listr from 'listr';
 
 const log = debug('page-loader');
 
@@ -29,8 +30,11 @@ export default (assets, url, resultHtml, outputDir) => {
 
   log('Creating files directory');
   return fs.mkdir(assetsDir, { recursive: true })
-    .then(() => assets.map(({ link }) => downloadAsset(link, assetsDir)))
-    .then((promises) => Promise.all(promises))
+    .then(() => assets.map(({ link }) => {
+      const result = { title: link, task: () => downloadAsset(link, assetsDir) };
+      return result;
+    }))
+    .then((tasks) => new Listr(tasks, { concurrent: true }).run())
     .then(() => createPageFile(resultHtml, url, outputDir))
     .then((pageFilepath) => [pageFilepath, assetsDir])
     .catch((e) => console.error(e));

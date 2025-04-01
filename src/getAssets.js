@@ -18,18 +18,19 @@ export default (html, url) => {
     .flatMap((tag) => (
       $(tag).map((index, element) => {
         const current = $(element).attr(tagToAttrMapping[tag]);
+        if (current) {
+          const passedUrl = new URL(url);
+          const assetLink = new URL(current, passedUrl);
+          if (assetLink.origin === passedUrl.origin) {
+            const newSrc = dirname + getAssetName(assetLink.origin + assetLink.pathname);
+            $(element).attr(tagToAttrMapping[tag], newSrc);
 
-        const passedUrl = new URL(url);
-        const assetLink = new URL(current, passedUrl);
-        if (assetLink.origin === passedUrl.origin) {
-          const newSrc = dirname + getAssetName(assetLink.origin + assetLink.pathname);
-          $(element).attr(tagToAttrMapping[tag], newSrc);
-
-          return { link: assetLink.href, tag };
+            return { link: assetLink.href, tag };
+          }
         }
         return [];
       }).get()
     ));
 
-  return [$.html(), result];
+  return [$.html(), result.filter((item) => item !== 'Not absolute link')];
 };

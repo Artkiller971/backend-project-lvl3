@@ -26,6 +26,8 @@ export default (url, outputDir = process.cwd()) => {
         throw new Error('Provided directory does not exist');
       } else if (e.code === 'EACESS') {
         throw new Error('You do not have access to write to the provided directory');
+      } else if (e.code === 'ENOTFOUND') {
+        throw new Error('Provided link is not valid');
       }
 
       throw new Error(e);
