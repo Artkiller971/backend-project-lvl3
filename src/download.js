@@ -2,9 +2,9 @@ import axios from 'axios';
 import path from 'node:path';
 import * as fs from 'node:fs/promises';
 import debug from 'debug';
+import Listr from 'listr';
 import createPageFile from './createPageFile.js';
 import { getAssetName, getDirectoryName } from './utils.js';
-import Listr from 'listr';
 
 const log = debug('page-loader');
 
