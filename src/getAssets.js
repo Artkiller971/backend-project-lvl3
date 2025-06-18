@@ -1,36 +1,36 @@
-import * as cheerio from 'cheerio';
-import { URL } from 'node:url';
+import * as cheerio from 'cheerio'
+import { URL } from 'node:url'
 
-import { getAssetName, getDirectoryName } from './utils.js';
+import { getAssetName, getDirectoryName } from './utils.js'
 
 const tagToAttrMapping = {
   img: 'src',
   link: 'href',
   script: 'src',
-};
+}
 
 export default (html, url) => {
-  const dirname = getDirectoryName(url);
+  const dirname = getDirectoryName(url)
 
-  const $ = cheerio.load(html);
+  const $ = cheerio.load(html)
 
   const result = Object.keys(tagToAttrMapping)
-    .flatMap((tag) => (
+    .flatMap(tag => (
       $(tag).map((index, element) => {
-        const current = $(element).attr(tagToAttrMapping[tag]);
+        const current = $(element).attr(tagToAttrMapping[tag])
         if (current) {
-          const passedUrl = new URL(url);
-          const assetLink = new URL(current, passedUrl);
+          const passedUrl = new URL(url)
+          const assetLink = new URL(current, passedUrl)
           if (assetLink.origin === passedUrl.origin) {
-            const newSrc = dirname + getAssetName(assetLink.origin + assetLink.pathname);
-            $(element).attr(tagToAttrMapping[tag], newSrc);
+            const newSrc = dirname + getAssetName(assetLink.origin + assetLink.pathname)
+            $(element).attr(tagToAttrMapping[tag], newSrc)
 
-            return { link: assetLink.href, tag };
+            return { link: assetLink.href, tag }
           }
         }
-        return [];
+        return []
       }).get()
-    ));
+    ))
 
-  return [$.html(), result.filter((item) => item !== 'Not absolute link')];
-};
+  return [$.html(), result.filter(item => item !== 'Not absolute link')]
+}

@@ -21,3 +21,7 @@ Use `page-loader -h` for help
 **page-loader [options] \<url\>**
 
 **Select directory with -o flag (default directory is current directory)**
+
+## Showcase
+
+[![asciicast](https://asciinema.org/a/zfFIIIqvnRaa7lp9vRplDlBvp.svg)](https://asciinema.org/a/zfFIIIqvnRaa7lp9vRplDlBvp)
