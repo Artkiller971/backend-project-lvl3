@@ -9,6 +9,15 @@
 - link the package locally "npm link"
 - run "page-loader -h"
 
-## Showcase
+## Installation
 
-[![asciicast](https://asciinema.org/a/IxHpl6dmHqBZaUzeO3FLouDSu.svg)](https://asciinema.org/a/IxHpl6dmHqBZaUzeO3FLouDSu)
+Clone the repository, run `npm link` from inside the repository.
+
+Run `make install`
+
+Use `page-loader -h` for help
+
+## Usage
+**page-loader [options] \<url\>**
+
+**Select directory with -o flag (default directory is current directory)**
